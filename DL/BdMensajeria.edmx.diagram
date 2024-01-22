@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ca32a6cb10ce4850b3dff9717f18bc09" Name="Diagram1">
+        <EntityTypeShape EntityType="ESantiagoMensajeriaModel.Usuario" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="ESantiagoMensajeriaModel.Contactos" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ESantiagoMensajeriaModel.Mensaje" Width="1.5" PointX="3" PointY="0.875" />
+        <AssociationConnector Association="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1A14E395" />
+        <AssociationConnector Association="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1B0907CE" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

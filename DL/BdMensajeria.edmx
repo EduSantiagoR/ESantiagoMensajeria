@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ESantiagoMensajeriaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Contactos">
+          <Key>
+            <PropertyRef Name="IdUsuarioRemitente" />
+            <PropertyRef Name="IdUsuarioDestinatario" />
+          </Key>
+          <Property Name="IdUsuarioRemitente" Type="int" Nullable="false" />
+          <Property Name="IdUsuarioDestinatario" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mensaje">
+          <Key>
+            <PropertyRef Name="IdMensaje" />
+          </Key>
+          <Property Name="IdMensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuarioRemitente" Type="int" Nullable="false" />
+          <Property Name="IdUsuarioDestinatario" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Mensaje" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="varbinary" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Contactos__IdUsu__1367E606">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Contactos" Type="Self.Contactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Contactos">
+              <PropertyRef Name="IdUsuarioRemitente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contactos__IdUsu__145C0A3F">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Contactos" Type="Self.Contactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Contactos">
+              <PropertyRef Name="IdUsuarioDestinatario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Mensaje__IdUsuar__1A14E395">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Mensaje">
+              <PropertyRef Name="IdUsuarioRemitente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Mensaje__IdUsuar__1B0907CE">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Mensaje">
+              <PropertyRef Name="IdUsuarioDestinatario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ContactosAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuarioRemitente" Type="int" Mode="In" />
+          <Parameter Name="IdUsuarioDestinatario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ContactosDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuarioRemitente" Type="int" Mode="In" />
+          <Parameter Name="IdUsuarioDestinatario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ContactosGetByIdUsuarioRemitente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MensajeGetMessages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuarioRemitente" Type="int" Mode="In" />
+          <Parameter Name="IdUsuarioDestinatario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MensajeSendMessage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuarioRemitente" Type="int" Mode="In" />
+          <Parameter Name="IdUsuarioDestinatario" Type="int" Mode="In" />
+          <Parameter Name="Mensaje" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="UsuarioAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varbinary" Mode="In" />
+        </Function>
+        <Function Name="UsuarioCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varbinary" Mode="In" />
+        </Function>
+        <Function Name="UsuarioGetByUsername" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="ESantiagoMensajeriaModelStoreContainer">
+          <EntitySet Name="Contactos" EntityType="Self.Contactos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mensaje" EntityType="Self.Mensaje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Contactos__IdUsu__1367E606" Association="Self.FK__Contactos__IdUsu__1367E606">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Contactos" EntitySet="Contactos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contactos__IdUsu__145C0A3F" Association="Self.FK__Contactos__IdUsu__145C0A3F">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Contactos" EntitySet="Contactos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Mensaje__IdUsuar__1A14E395" Association="Self.FK__Mensaje__IdUsuar__1A14E395">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Mensaje" EntitySet="Mensaje" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Mensaje__IdUsuar__1B0907CE" Association="Self.FK__Mensaje__IdUsuar__1B0907CE">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Mensaje" EntitySet="Mensaje" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ESantiagoMensajeriaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="Binary" MaxLength="20" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Usuario1" Relationship="Self.Contactos" FromRole="Usuario" ToRole="Usuario1" />
+          <NavigationProperty Name="Usuario2" Relationship="Self.Contactos" FromRole="Usuario1" ToRole="Usuario" />
+          <NavigationProperty Name="Mensaje" Relationship="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1A14E395" FromRole="Usuario" ToRole="Mensaje" />
+          <NavigationProperty Name="Mensaje1" Relationship="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1B0907CE" FromRole="Usuario" ToRole="Mensaje" />
+        </EntityType>
+        <Association Name="Contactos">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <End Role="Usuario1" Type="Self.Usuario" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="ESantiagoMensajeriaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <AssociationSet Name="Contactos" Association="Self.Contactos">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Usuario1" EntitySet="Usuario" />
+          </AssociationSet>
+          <FunctionImport Name="UsuarioAdd">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="UsuarioCheck" ReturnType="Collection(ESantiagoMensajeriaModel.UsuarioCheck_Result)">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="ContactosGetByIdUsuarioRemitente" ReturnType="Collection(ESantiagoMensajeriaModel.ContactosGetByIdUsuarioRemitente_Result)">
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Mensaje" EntityType="ESantiagoMensajeriaModel.Mensaje" />
+          <AssociationSet Name="FK__Mensaje__IdUsuar__1A14E395" Association="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1A14E395">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Mensaje" EntitySet="Mensaje" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Mensaje__IdUsuar__1B0907CE" Association="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1B0907CE">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Mensaje" EntitySet="Mensaje" />
+          </AssociationSet>
+          <FunctionImport Name="MensajeGetMessages" ReturnType="Collection(ESantiagoMensajeriaModel.MensajeGetMessages_Result)">
+            <Parameter Name="IdUsuarioRemitente" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuarioDestinatario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MensajeSendMessage">
+            <Parameter Name="IdUsuarioRemitente" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuarioDestinatario" Mode="In" Type="Int32" />
+            <Parameter Name="Mensaje" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ContactosAdd">
+            <Parameter Name="IdUsuarioRemitente" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuarioDestinatario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ContactosDelete">
+            <Parameter Name="IdUsuarioRemitente" Mode="In" Type="Int32" />
+            <Parameter Name="IdUsuarioDestinatario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UsuarioGetByUsername" ReturnType="Collection(ESantiagoMensajeriaModel.UsuarioGetByUsername_Result)">
+            <Parameter Name="Username" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="UsuarioCheck_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+          <Property Type="Binary" Name="Password" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ContactosGetByIdUsuarioRemitente_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <EntityType Name="Mensaje">
+          <Key>
+            <PropertyRef Name="IdMensaje" />
+          </Key>
+          <Property Name="IdMensaje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuarioRemitente" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuarioDestinatario" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Mensaje1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Usuario" Relationship="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1A14E395" FromRole="Mensaje" ToRole="Usuario" />
+          <NavigationProperty Name="Usuario1" Relationship="ESantiagoMensajeriaModel.FK__Mensaje__IdUsuar__1B0907CE" FromRole="Mensaje" ToRole="Usuario" />
+        </EntityType>
+        <Association Name="FK__Mensaje__IdUsuar__1A14E395">
+          <End Type="ESantiagoMensajeriaModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="ESantiagoMensajeriaModel.Mensaje" Role="Mensaje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Mensaje">
+              <PropertyRef Name="IdUsuarioRemitente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Mensaje__IdUsuar__1B0907CE">
+          <End Type="ESantiagoMensajeriaModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="ESantiagoMensajeriaModel.Mensaje" Role="Mensaje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Mensaje">
+              <PropertyRef Name="IdUsuarioDestinatario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="MensajeGetMessages_Result">
+          <Property Type="Int32" Name="IdMensaje" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuarioRemitente" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuarioDestinatario" Nullable="false" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Mensaje" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="UsuarioGetByUsername_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ESantiagoMensajeriaModelStoreContainer" CdmEntityContainer="ESantiagoMensajeriaEntities">
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="ESantiagoMensajeriaModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Contactos" TypeName="ESantiagoMensajeriaModel.Contactos" StoreEntitySet="Contactos">
+            <EndProperty Name="Usuario">
+              <ScalarProperty Name="IdUsuario" ColumnName="IdUsuarioRemitente" />
+            </EndProperty>
+            <EndProperty Name="Usuario1">
+              <ScalarProperty Name="IdUsuario" ColumnName="IdUsuarioDestinatario" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="UsuarioAdd" FunctionName="ESantiagoMensajeriaModel.Store.UsuarioAdd" />
+          <FunctionImportMapping FunctionImportName="UsuarioCheck" FunctionName="ESantiagoMensajeriaModel.Store.UsuarioCheck">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoMensajeriaModel.UsuarioCheck_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ContactosGetByIdUsuarioRemitente" FunctionName="ESantiagoMensajeriaModel.Store.ContactosGetByIdUsuarioRemitente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoMensajeriaModel.ContactosGetByIdUsuarioRemitente_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Mensaje">
+            <EntityTypeMapping TypeName="ESantiagoMensajeriaModel.Mensaje">
+              <MappingFragment StoreEntitySet="Mensaje">
+                <ScalarProperty Name="Mensaje1" ColumnName="Mensaje" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdUsuarioDestinatario" ColumnName="IdUsuarioDestinatario" />
+                <ScalarProperty Name="IdUsuarioRemitente" ColumnName="IdUsuarioRemitente" />
+                <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MensajeGetMessages" FunctionName="ESantiagoMensajeriaModel.Store.MensajeGetMessages">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoMensajeriaModel.MensajeGetMessages_Result">
+                <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
+                <ScalarProperty Name="IdUsuarioRemitente" ColumnName="IdUsuarioRemitente" />
+                <ScalarProperty Name="IdUsuarioDestinatario" ColumnName="IdUsuarioDestinatario" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MensajeSendMessage" FunctionName="ESantiagoMensajeriaModel.Store.MensajeSendMessage" />
+          <FunctionImportMapping FunctionImportName="ContactosAdd" FunctionName="ESantiagoMensajeriaModel.Store.ContactosAdd" />
+          <FunctionImportMapping FunctionImportName="ContactosDelete" FunctionName="ESantiagoMensajeriaModel.Store.ContactosDelete" />
+          <FunctionImportMapping FunctionImportName="UsuarioGetByUsername" FunctionName="ESantiagoMensajeriaModel.Store.UsuarioGetByUsername">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoMensajeriaModel.UsuarioGetByUsername_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

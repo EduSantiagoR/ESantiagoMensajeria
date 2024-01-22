@@ -1,0 +1,141 @@
+﻿@model ML.Usuario
+@{
+    ViewBag.Title = "GetContactos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .label-izquierda{
+        text-align:left;
+    }
+    .label-derecha{
+        text-align:right;
+    }
+</style>
+<h2 class="text-center">Contactos</h2>
+<hr />
+<div>
+    <p>Agrega a un nuevo contacto</p>
+    <form method="post" action="@Url.Action("Add", "Contactos")">
+        <div class="input-group mb-3" style="width:350px">
+            <input name="username" type="text" class="form-control" placeholder="Username" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-success" type="submit" id="button-addon2">Agregar</button>
+        </div>
+        <input hidden value="@Model.IdUsuario" name="idRemitente" />
+    </form>
+</div>
+<hr />
+<div>
+    @if (Model.Usuarios != null)
+    {
+        if (Model.Usuarios.Count > 0)
+        {
+            <div class="row">
+
+                @foreach (ML.Usuario usuario in Model.Usuarios)
+                {
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <div class="card" style="border:solid 2px; border-color: blue">
+                            <div class="card-body">
+                                <h5 class="card-title">@usuario.Username</h5>
+                                <p class="card-text">@usuario.Email</p>
+                                <div class="row mb-3">
+                                    <div class="col col-2">
+                                        <button onclick="GetMensajes(@Model.IdUsuario, @usuario.IdUsuario, '@usuario.Username')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            Chat
+                                        </button>
+                                    </div>
+                                    <div class="col col-2">
+                                        <a class="btn btn-danger" href="@Url.Action("Delete", "Contactos", new { idContacto = usuario.IdUsuario })" onclick="return confirm('¿Seguro que quieres eliminar este contacto?')">Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="text-lg-end"></label>
+                    </div>
+                }
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Conversación</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div id="txtMensajes" class="container">
+                        </div>
+                        <div class="modal-footer">
+                            <div class="input-group justify-content-end">
+                                <input id="txtMessage" type="text" class="form-control" placeholder="Mensaje" aria-label="Message" aria-describedby="button-addon2">
+                                <button onclick="SendMessage()" class="btn btn-success" type="button" id="button-addon2">Enviar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <label class="align-content-end"></label>
+
+
+        }
+        else
+        {
+            <div role="alert" class="alert alert-warning">No hay contactos registrados</div>
+        }
+    }
+</div>
+<script type="text/javascript">
+    function GetMensajes(IdUsuarioRemitente, IdUsuarioDestino, nombreDestino) {
+        sessionStorage.setItem('idRemitente', IdUsuarioRemitente);
+        sessionStorage.setItem('idDestino', IdUsuarioDestino);
+        sessionStorage.setItem('nombreDestino', nombreDestino);
+
+        $.ajax({
+            url: '/Contactos/GetMensajes',
+            type: 'GET',
+            dataType: 'json',
+            data: { idUsuarioRemitente: IdUsuarioRemitente, idUsuarioDestinatario: IdUsuarioDestino },
+            success: function (result) {
+                $('#txtMensajes').empty();
+                var idRemitente = parseInt(sessionStorage.getItem('idRemitente'));
+                $.each(result, function (index, mensaje) {
+                    if (mensaje.IdUsuarioRemitente == idRemitente) {
+                        $('#txtMensajes').append('<label class="label-derecha">Yo: ' + mensaje.Message + '</label><br /><br />');
+                    }
+                    else {
+                        $('#txtMensajes').append('<label class="text-left">' + nombreDestino +': '+ mensaje.Message + '</label><br /><br />');
+                    }
+                });
+            },
+            error: function (error) {
+                alert('Ha ocurrido un error al recuperar los mensajes.');
+            }
+        });
+    }
+
+    function SendMessage() {
+        var message = $('#txtMessage').val();
+        var idRemitente = sessionStorage.getItem('idRemitente');
+        var idDestino = sessionStorage.getItem('idDestino');
+        var nombreDestino = sessionStorage.getItem('nombreDestino');
+
+        if (message == null || message == "") {
+            alert('Debe escribir un mensaje.');
+        }
+        else {
+            $.ajax({
+                url: '/Contactos/SendMessage',
+                type: 'GET',
+                dataType: 'json',
+                data: { idUsuarioRemitente: idRemitente, idUsuarioDestinatario: idDestino, mensaje: message },
+                success: function (result) {
+                    $('#txtMessage').val('');
+                    GetMensajes(idRemitente, idDestino, nombreDestino);
+                },
+                error: function (error) {
+                    alert('Error al enviar mensaje.');
+                }
+            });
+        }
+    }
+</script>
